@@ -207,7 +207,7 @@
 
         return {
             restrict: 'E',
-            templateUrl: baseUrl + 'lib/angular-recurrenceinput/recurrenceinput.html',
+            templateUrl: globs.baseUrl + 'lib/angular-recurrenceinput/recurrenceinput.html',
             scope: {
                 xrrule: '=ngModel',
                 riConfig: '=',
@@ -1182,10 +1182,6 @@
                 }
 
                 $scope.$watch('xrrule', updateInternals);
-                setTimeout(function() {
-                    $scope.ri.showForm();
-                    $scope.ri.rtemplate = $scope.conf.rtemplate.yearly;
-                },1000);
             }
         };
     }]);
