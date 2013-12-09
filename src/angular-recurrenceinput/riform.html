@@ -1,0 +1,272 @@
+﻿<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header" data-ng-show="message">
+            <h4 data-ng-bind="message"></h4>
+        </div>
+        <div class="modal-body">
+            <div class="riform">
+                <form ng-submit="ri.save()">
+                    <h1>{{i18n.title}}</h1>
+                    <div class="messagearea" ng-show="ri.messageAreaText" ng-bind="ri.messageAreaText">
+                    </div>
+                    <div class="rirtemplate">
+                        <label for="{{name}}rtemplate" class="rilabel">
+                            {{i18n.recurrenceType}}
+                        </label>
+                        <select ng-model="ri.rtemplate" name="rirtemplate" class="rifield" ng-options="v as i18n.rtemplate[k] for (k,v) in conf.rtemplate"></select>
+                        <div>
+                            <div class="riformfields">
+                                <div ng-show="ri.showridailyinterval()" class="rifield">
+                                    <label for="{{name}}dailyinterval" class="rilabel">
+                                        {{i18n.dailyInterval1}}
+                                    </label>
+                                    <div class="field">
+                                        <input type="text" size="2"
+                                               value="1"
+                                               ng-model="ri.dailyinterval"
+                                               id="{{name}}dailyinterval" />
+                                        {{i18n.dailyInterval2}}
+                                    </div>
+                                </div>
+                                <div ng-show="ri.showriweeklyinterval()" class="rifield">
+                                    <label for="{{name}}weeklyinterval" class="rilabel">
+                                        {{i18n.weeklyInterval1}}
+                                    </label>
+                                    <div class="field">
+                                        <input type="text" size="2"
+                                               value="1"
+                                               ng-model="ri.weeklyinterval"
+                                               id="{{name}}weeklyinterval" />
+                                        {{i18n.weeklyInterval2}}
+                                    </div>
+                                </div>
+                                <div ng-show="ri.showriweeklyweekdays()" class="rifield riweeklyweekdays">
+                                    <label class="rilabel" for="{{name}}weeklyinterval">{{i18n.weeklyWeekdays}}</label>
+                                    <div class="field">
+                                        <div class="riweeklyweekday" ng-repeat="weekday in conf.orderedWeekdays">
+                                            <input type="checkbox"
+                                                   name="riweeklyweekdays{{weekdays[weekday]}}"
+                                                   id="{{name}}weeklyWeekdays{{weekdays[weekday]}}"
+                                                   ng-model="ri.weeklyweekdays[weekday]" />
+                                            <label for="{{name}}weeklyWeekdays{{weekdays[weekday]}}">{{i18n.shortWeekdays[weekday]}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div ng-show="ri.showrimonthlyinterval()" class="rifield">
+                                    <label for="rimonthlyinterval" class="rilabel">{{i18n.monthlyInterval1}}</label>
+                                    <div class="field">
+                                        <input type="text" size="2"
+                                               value="1"
+                                               ng-model="ri.monthlyinterval" />
+                                        {{i18n.monthlyInterval2}}
+                                    </div>
+                                </div>
+                                <div ng-show="ri.showrimonthlyoptions()" class="rifield rimonthlyoptions">
+                                    <label for="rimonthlytype" class="rilabel">{{i18n.monthlyRepeatOn}}</label>
+                                    <div class="field">
+                                        <div>
+                                            <input type="radio"
+                                                   value="DAYOFMONTH"
+                                                   ng-model="ri.monthlytype"
+                                                   id="{{name}}monthlytype:DAYOFMONTH" />
+                                            <label for="{{name}}monthlytype:DAYOFMONTH">
+                                                {{i18n.monthlyDayOfMonth1}}
+                                            </label>
+                                            <select ng-model="ri.monthlydayofmonthday" id="{{name}}monthlydayofmonthday"
+                                                    ng-options="o as o for o in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]"></select>
+                                            {{i18n.monthlyDayOfMonth2}}
+                                        </div>
+                                        <div>
+                                            <input type="radio"
+                                                   value="WEEKDAYOFMONTH"
+                                                   ng-model="ri.monthlytype"
+                                                   id="{{name}}monthlytype:WEEKDAYOFMONTH" />
+                                            <label for="{{name}}monthlytype:WEEKDAYOFMONTH">
+                                                {{i18n.monthlyWeekdayOfMonth1}}
+                                            </label>
+                                            <select ng-model="ri.monthlyweekdayofmonthindex" ng-options="conf.orderIndexes[i] as o for (i,o) in i18n.orderIndexes"></select>
+                                            {{i18n.monthlyWeekdayOfMonth2}}
+                                            <select ng-model="ri.monthlyweekdayofmonth" ng-options="conf.weekdays[o] as i18n.weekdays[o] for o in conf.orderedWeekdays"></select>
+                                            {{i18n.monthlyWeekdayOfMonth3}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div ng-show="ri.showriyearlyinterval()" class="rifield">
+                                    <label for="riyearlyinterval" class="rilabel">{{i18n.yearlyInterval1}}</label>
+                                    <div class="field">
+                                        <input type="text" size="2"
+                                               value="1"
+                                               ng-model="ri.yearlyinterval" />
+                                        {{i18n.yearlyInterval2}}
+                                    </div>
+                                </div>
+                                <div ng-show="ri.showriyearlyoptions()" class="rifield riyearlyoptions">
+                                    <label for="riyearlyType" class="rilabel">{{i18n.yearlyRepeatOn}}</label>
+                                    <div class="field">
+                                        <div>
+                                            <input type="radio"
+                                                   value="DAYOFMONTH"
+                                                   ng-model="ri.yearlyType"
+                                                   id="{{name}}yearlytype:DAYOFMONTH" />
+                                            <label for="{{name}}yearlytype:DAYOFMONTH">
+                                                {{i18n.yearlyDayOfMonth1}}
+                                            </label>
+                                            <select ng-model="ri.yearlydayofmonthmonth" ng-options="i18n.months.indexOf(m)+1 as m for m in i18n.months"></select>
+                                            {{i18n.yearlyDayOfMonth2}}
+                                            <select ng-model="ri.yearlydayofmonthday"
+                                                    ng-options="o as o for o in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]"></select>
+                                            {{i18n.yearlyDayOfMonth3}}
+                                        </div>
+                                        <div>
+                                            <input type="radio"
+                                                   value="WEEKDAYOFMONTH"
+                                                   ng-model="ri.yearlyType"
+                                                   id="{{name}}yearlytype:WEEKDAYOFMONTH" />
+                                            <label for="{{name}}yearlytype:WEEKDAYOFMONTH">
+                                                {{i18n.yearlyWeekdayOfMonth1}}
+                                            </label>
+                                            <select ng-model="ri.yearlyweekdayofmonthindex" ng-options="conf.orderIndexes[i] as o for (i,o) in i18n.orderIndexes"></select>
+                                            <label for="{{name}}yearlytype:WEEKDAYOFMONTH">
+                                                {{i18n.yearlyWeekdayOfMonth2}}
+                                            </label>
+                                            <select ng-model="ri.yearlyweekdayofmonthday" ng-options="conf.weekdays[o] as i18n.weekdays[o] for o in conf.orderedWeekdays"></select>
+                                            {{i18n.yearlyWeekdayOfMonth3}}
+                                            <select ng-model="ri.yearlyweekdayofmonthmonth" ng-options="i18n.months.indexOf(m)+1 as m for m in i18n.months"></select>
+                                            {{i18n.yearlyWeekdayOfMonth4}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div ng-show="ri.showrirangeoptions()" class="rifield rirangeoptions">
+                                    <label class="rilabel">{{i18n.range}}</label>
+                                    <div class="field">
+                                        <div ng-show="conf.hasRepeatForeverButton">
+                                            <input type="radio"
+                                                   value="NOENDDATE"
+                                                   ng-model="ri.rangetype"
+                                                   id="{{name}}rangetype:NOENDDATE" />
+                                            <label for="{{name}}rangetype:NOENDDATE">
+                                                {{i18n.rangeNoEnd}}
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <input type="radio"
+                                                   checked="checked"
+                                                   value="BYOCCURRENCES"
+                                                   ng-model="ri.rangetype"
+                                                   id="{{name}}rangetype:BYOCCURRENCES" />
+                                            <label for="{{name}}rangetype:BYOCCURRENCES">
+                                                {{i18n.rangeByOccurrences1}}
+                                            </label>
+                                            <input type="text" size="3"
+                                                   value="10"
+                                                   ng-model="ri.rangebyoccurrencesvalue" />
+                                            {{i18n.rangeByOccurrences2}}
+                                        </div>
+                                        <div>
+                                            <input type="radio"
+                                                   value="BYENDDATE"
+                                                   ng-model="ri.rangetype"
+                                                   id="{{name}}rangetype:BYENDDATE" />
+                                            <label for="{{name}}rangetype:BYENDDATE">
+                                                {{i18n.rangeByEndDate}}
+                                            </label>
+                                            <input type="text" ng-model="ri.rangebyenddate" datepicker-popup="MM/dd/yyyy" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="rioccurrencesactions" ng-show="ri.showrioccurrencesactions">
+                                <div class="rioccurancesheader">
+                                    <h2>{{i18n.preview}}</h2>
+                                    <span class="refreshbutton action">
+                                        <a class="rirefreshbutton" href="#" title="{{i18n.refresh}}">
+                                            {{i18n.refresh}}
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="rioccurrences">
+                            </div>
+                            <div class="rioccurrencesactions" ng-show="ri.showrioccurrencesactions">
+                                <div class="rioccurancesheader">
+                                    <h2>{{i18n.addDate}}</h2>
+                                </div>
+                                <div class="riaddoccurrence">
+                                    <div class="errorarea" ng-bind="ri.errorsText" ng-show="ri.errorsText"></div>
+                                    <input type="date" name="adddate" id="adddate" />
+                                    <input type="button" name="addaction" id="addaction" value="{{i18n.add}}">
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" data-ng-click="ri.save()">{{i18n.save}}</button>
+            <button class="btn btn-warning" data-ng-click="ri.cancel()">{{i18n.cancel}}</button>
+        </div>
+    </div>
+</div>
+<!--<div class="rioccurrences">
+
+    {{each occurrences}}
+    <div class="occurrence {{occurrences[$index].type}}">
+
+        <span>
+
+            {{occurrences[$index].formattedDate}}
+            {{if occurrences[$index].type === "start"}}
+            <span class="rlabel">{{i18n.recurrenceStart}}</span>
+            {{/if}}
+            {{if occurrences[$index].type === "rdate"}}
+            <span class="rlabel">{{i18n.additionalDate}}</span>
+            {{/if}}
+
+        </span>
+        {{if !readOnly}}
+        <span class="action">
+
+            {{if occurrences[$index].type === "rrule"}}
+            <a date="{{occurrences[$index].date}}" href="#"
+                                class="{{occurrences[$index].type}}" title="{{i18n.exclude}}">
+
+                {{i18n.exclude}}
+
+            </a>
+            {{/if}}
+            {{if occurrences[$index].type === "rdate"}}
+            <a date="{{occurrences[$index].date}}" href="#"
+                                class="{{occurrences[$index].type}}" title="{{i18n.remove}}">
+
+                {{i18n.remove}}
+
+            </a>
+            {{/if}}
+            {{if occurrences[$index].type === "exdate"}}
+            <a date="{{occurrences[$index].date}}" href="#"
+                                class="{{occurrences[$index].type}}" title="{{i18n.include}}">
+
+                {{i18n.include}}
+
+            </a>
+            {{/if}}
+
+        </span>
+        {{/if}}
+
+    </div>
+    {{/each}}
+    <div class="batching">
+
+        {{each batch.batches}}
+        {{if $index === batch.currentBatch}}<span class="current">
+            {{/if}}
+            <a href="#" start="{{batch.batches[$index][0]}}">[{{batch.batches[$index][0]}} - {{batch.batches[$index][1]}}]</a>
+            {{if $index === batch.currentBatch}}
+        </span>{{/if}}
+        {{/each}}
+
+    </div>
+</div>-->

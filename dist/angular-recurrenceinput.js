@@ -1,8 +1,483 @@
-﻿define([rr('app')], function (app) {
-    'use strict';
+(function(window, document, define, undefined) {
+	'use strict';
 
-    var keeperDirectives = angular.module('app');
-    keeperDirectives.register.directive('recurrenceInput', ['$document', function ($document) {
+var riTemplate = {};
+
+riTemplate["ridisplay.html"] = "<style>\n" +
+    "\n" +
+    "        div.riform h1 {\n" +
+    "            color: #888888;\n" +
+    "            border-bottom: 1px solid #DDDDDD;\n" +
+    "            font-size: 20px;\n" +
+    "            line-height: 1;\n" +
+    "            margin: 0;\n" +
+    "            padding-bottom: 5px;\n" +
+    "            padding-left: 5px;\n" +
+    "        }\n" +
+    "\n" +
+    "        div.riform form {\n" +
+    "            margin-bottom: 0;\n" +
+    "        }\n" +
+    "\n" +
+    "        div.riform .rifield {\n" +
+    "            clear: both;\n" +
+    "        }\n" +
+    "\n" +
+    "            div.riform .rifield .field {\n" +
+    "                float: left;\n" +
+    "                clear: none;\n" +
+    "            }\n" +
+    "\n" +
+    "        div.riform .rilabel {\n" +
+    "            display: block;\n" +
+    "            float: left;\n" +
+    "            font-weight: bold;\n" +
+    "            margin-right: 10px;\n" +
+    "            text-align: right;\n" +
+    "            width: 130px;\n" +
+    "        }\n" +
+    "\n" +
+    "        div.riform .rirtemplate {\n" +
+    "            margin-top: 6px;\n" +
+    "        }\n" +
+    "\n" +
+    "    div.riformfields {\n" +
+    "        min-height: 11em;\n" +
+    "        min-width: 25em;\n" +
+    "    }\n" +
+    "\n" +
+    "    div.riform .rirangeoptions input,\n" +
+    "    div.riform .rimonthlyoptions input,\n" +
+    "    div.riform .riyearlyoptions input {\n" +
+    "        margin: 0;\n" +
+    "    }\n" +
+    "\n" +
+    "    div.riform .riweeklyweekdays .riweeklyweekday input {\n" +
+    "        display: block;\n" +
+    "        margin: 8px auto 0;\n" +
+    "    }\n" +
+    "\n" +
+    "    div.riform .riweeklyweekdays .riweeklyweekday label {\n" +
+    "        display: block;\n" +
+    "    }\n" +
+    "\n" +
+    "    div.riform .riweeklyweekdays .riweeklyweekday {\n" +
+    "        margin-right: 15px;\n" +
+    "        float: left;\n" +
+    "    }\n" +
+    "\n" +
+    "    div.riform input.ricancelbutton {\n" +
+    "        background-image: url(pb_close.png);\n" +
+    "        background-color: transparent;\n" +
+    "        font-size: 0; /* For IE8 */\n" +
+    "        color: transparent;\n" +
+    "        border: none;\n" +
+    "        position: absolute;\n" +
+    "        left: -14px;\n" +
+    "        top: -14px;\n" +
+    "        cursor: pointer;\n" +
+    "        height: 30px;\n" +
+    "        width: 30px;\n" +
+    "    }\n" +
+    "\n" +
+    "    div.rioccurrencesactions .riaddoccurrence #adddate {\n" +
+    "        width: 75%;\n" +
+    "    }\n" +
+    "\n" +
+    "    div.rioccurrencesactions .rioccurancesheader {\n" +
+    "        border-bottom: 1px solid #DDDDDD;\n" +
+    "        line-height: 1.5;\n" +
+    "        clear: both;\n" +
+    "        margin-top: 30px;\n" +
+    "    }\n" +
+    "\n" +
+    "        div.rioccurrencesactions .rioccurancesheader h2 {\n" +
+    "            color: #888888;\n" +
+    "            display: inline;\n" +
+    "            font-size: 18px;\n" +
+    "            font-weight: bold;\n" +
+    "            margin: 0px 0px 5px 5px;\n" +
+    "        }\n" +
+    "\n" +
+    "\n" +
+    "    div.rioccurrences div.batching {\n" +
+    "        font-size: 70%;\n" +
+    "        text-align: center;\n" +
+    "    }\n" +
+    "\n" +
+    "    div.rioccurrences span.current {\n" +
+    "        font-weight: bold;\n" +
+    "    }\n" +
+    "\n" +
+    "    div.riform span.action a {\n" +
+    "        height: 19px;\n" +
+    "        width: 19px;\n" +
+    "        overflow: hidden;\n" +
+    "        float: right;\n" +
+    "        text-indent: 9999px;\n" +
+    "    }\n" +
+    "\n" +
+    "    div.rioccurrences .occurrence {\n" +
+    "        border-top: 1px solid transparent;\n" +
+    "        border-bottom: 1px solid transparent;\n" +
+    "    }\n" +
+    "\n" +
+    "        div.rioccurrences .occurrence:hover {\n" +
+    "            border-top: 1px solid #DDDDDD;\n" +
+    "            border-bottom: 1px solid #DDDDDD;\n" +
+    "        }\n" +
+    "\n" +
+    "        div.rioccurrences .occurrence.start span.rlabel,\n" +
+    "        div.rioccurrences .occurrence.rdate span.rlabel {\n" +
+    "            color: #9CBA9B;\n" +
+    "            margin: 0 5px;\n" +
+    "            font-size: 70%;\n" +
+    "            font-weight: bold;\n" +
+    "        }\n" +
+    "\n" +
+    "        div.rioccurrences .occurrence.exdate {\n" +
+    "            opacity: 0.4;\n" +
+    "            filter: alpha(opacity=40);\n" +
+    "        }\n" +
+    "\n" +
+    "    div.ridisplay .occurrence.exdate {\n" +
+    "        display: none;\n" +
+    "    }\n" +
+    "\n" +
+    "    div.rioccurrences .occurrence.rdate {\n" +
+    "        background: #FFFFE0;\n" +
+    "    }\n" +
+    "\n" +
+    "    div.rioccurrences div.occurrence {\n" +
+    "        margin-left: 5px;\n" +
+    "    }\n" +
+    "\n" +
+    "    div.rioccurrences a.rrule,\n" +
+    "    div.rioccurrences a.rdate,\n" +
+    "    div.rioccurrences a.exdate {\n" +
+    "        color: transparent;\n" +
+    "        margin-top: 6px;\n" +
+    "        margin-right: 5px;\n" +
+    "    }\n" +
+    "\n" +
+    "\n" +
+    "    div.rioccurrences a.rrule {\n" +
+    "        background-image: url(delete.png);\n" +
+    "    }\n" +
+    "\n" +
+    "    div.rioccurrences a.rdate {\n" +
+    "        background-image: url(delete.png);\n" +
+    "    }\n" +
+    "\n" +
+    "    div.rioccurrences a.exdate {\n" +
+    "        background-image: url(undelete.png);\n" +
+    "    }\n" +
+    "\n" +
+    "    div.rioccurrencesactions a.rirefreshbutton {\n" +
+    "        background-image: url(refresh.png);\n" +
+    "        color: transparent;\n" +
+    "        margin-top: 4px;\n" +
+    "        margin-right: 5px;\n" +
+    "    }\n" +
+    "\n" +
+    "    div.messagearea,\n" +
+    "    div.errorarea {\n" +
+    "        background-color: red;\n" +
+    "        color: white;\n" +
+    "        font-weight: bold;\n" +
+    "        padding: 2px 10px;\n" +
+    "    }\n" +
+    "\n" +
+    "    div.ributtons .risavebutton {\n" +
+    "        display: block;\n" +
+    "        margin: 30px auto 0;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "\n" +
+    "<div class=\"ridisplay\">\n" +
+    "    <div class=\"rimain\">\n" +
+    "        <input type=\"checkbox\" id=\"{{name}}enable\" name=\"richeckbox\" ng-show=\"!conf.readOnly\" ng-change=\"enableChanged()\" ng-model=\"ri.enabled\" />\n" +
+    "        <label class=\"ridisplay\" for=\"{{name}}enable\" ng-show=\"!ri.enabled\">{{i18n.displayUnactivate}}</label>\n" +
+    "		<label class=\"ridisplay\" ng-show=\"ri.enabled\">{{ri.display}}</label>\n" +
+    "        <a ng-show=\"!conf.readOnly && ri.enabled\" ng-click=\"ri.showForm()\">{{i18n.edit_rules}}</a>\n" +
+    "    </div>\n" +
+    "    <div class=\"rioccurrences\" style=\"display:none\" />\n" +
+    "</div>";
+
+riTemplate["riform.html"] = "<div class=\"modal-dialog\">\n" +
+    "    <div class=\"modal-content\">\n" +
+    "        <div class=\"modal-header\" data-ng-show=\"message\">\n" +
+    "            <h4 data-ng-bind=\"message\"></h4>\n" +
+    "        </div>\n" +
+    "        <div class=\"modal-body\">\n" +
+    "            <div class=\"riform\">\n" +
+    "                <form ng-submit=\"ri.save()\">\n" +
+    "                    <h1>{{i18n.title}}</h1>\n" +
+    "                    <div class=\"messagearea\" ng-show=\"ri.messageAreaText\" ng-bind=\"ri.messageAreaText\">\n" +
+    "                    </div>\n" +
+    "                    <div class=\"rirtemplate\">\n" +
+    "                        <label for=\"{{name}}rtemplate\" class=\"rilabel\">\n" +
+    "                            {{i18n.recurrenceType}}\n" +
+    "                        </label>\n" +
+    "                        <select ng-model=\"ri.rtemplate\" name=\"rirtemplate\" class=\"rifield\" ng-options=\"v as i18n.rtemplate[k] for (k,v) in conf.rtemplate\"></select>\n" +
+    "                        <div>\n" +
+    "                            <div class=\"riformfields\">\n" +
+    "                                <div ng-show=\"ri.showridailyinterval()\" class=\"rifield\">\n" +
+    "                                    <label for=\"{{name}}dailyinterval\" class=\"rilabel\">\n" +
+    "                                        {{i18n.dailyInterval1}}\n" +
+    "                                    </label>\n" +
+    "                                    <div class=\"field\">\n" +
+    "                                        <input type=\"text\" size=\"2\"\n" +
+    "                                               value=\"1\"\n" +
+    "                                               ng-model=\"ri.dailyinterval\"\n" +
+    "                                               id=\"{{name}}dailyinterval\" />\n" +
+    "                                        {{i18n.dailyInterval2}}\n" +
+    "                                    </div>\n" +
+    "                                </div>\n" +
+    "                                <div ng-show=\"ri.showriweeklyinterval()\" class=\"rifield\">\n" +
+    "                                    <label for=\"{{name}}weeklyinterval\" class=\"rilabel\">\n" +
+    "                                        {{i18n.weeklyInterval1}}\n" +
+    "                                    </label>\n" +
+    "                                    <div class=\"field\">\n" +
+    "                                        <input type=\"text\" size=\"2\"\n" +
+    "                                               value=\"1\"\n" +
+    "                                               ng-model=\"ri.weeklyinterval\"\n" +
+    "                                               id=\"{{name}}weeklyinterval\" />\n" +
+    "                                        {{i18n.weeklyInterval2}}\n" +
+    "                                    </div>\n" +
+    "                                </div>\n" +
+    "                                <div ng-show=\"ri.showriweeklyweekdays()\" class=\"rifield riweeklyweekdays\">\n" +
+    "                                    <label class=\"rilabel\" for=\"{{name}}weeklyinterval\">{{i18n.weeklyWeekdays}}</label>\n" +
+    "                                    <div class=\"field\">\n" +
+    "                                        <div class=\"riweeklyweekday\" ng-repeat=\"weekday in conf.orderedWeekdays\">\n" +
+    "                                            <input type=\"checkbox\"\n" +
+    "                                                   name=\"riweeklyweekdays{{weekdays[weekday]}}\"\n" +
+    "                                                   id=\"{{name}}weeklyWeekdays{{weekdays[weekday]}}\"\n" +
+    "                                                   ng-model=\"ri.weeklyweekdays[weekday]\" />\n" +
+    "                                            <label for=\"{{name}}weeklyWeekdays{{weekdays[weekday]}}\">{{i18n.shortWeekdays[weekday]}}</label>\n" +
+    "                                        </div>\n" +
+    "                                    </div>\n" +
+    "                                </div>\n" +
+    "                                <div ng-show=\"ri.showrimonthlyinterval()\" class=\"rifield\">\n" +
+    "                                    <label for=\"rimonthlyinterval\" class=\"rilabel\">{{i18n.monthlyInterval1}}</label>\n" +
+    "                                    <div class=\"field\">\n" +
+    "                                        <input type=\"text\" size=\"2\"\n" +
+    "                                               value=\"1\"\n" +
+    "                                               ng-model=\"ri.monthlyinterval\" />\n" +
+    "                                        {{i18n.monthlyInterval2}}\n" +
+    "                                    </div>\n" +
+    "                                </div>\n" +
+    "                                <div ng-show=\"ri.showrimonthlyoptions()\" class=\"rifield rimonthlyoptions\">\n" +
+    "                                    <label for=\"rimonthlytype\" class=\"rilabel\">{{i18n.monthlyRepeatOn}}</label>\n" +
+    "                                    <div class=\"field\">\n" +
+    "                                        <div>\n" +
+    "                                            <input type=\"radio\"\n" +
+    "                                                   value=\"DAYOFMONTH\"\n" +
+    "                                                   ng-model=\"ri.monthlytype\"\n" +
+    "                                                   id=\"{{name}}monthlytype:DAYOFMONTH\" />\n" +
+    "                                            <label for=\"{{name}}monthlytype:DAYOFMONTH\">\n" +
+    "                                                {{i18n.monthlyDayOfMonth1}}\n" +
+    "                                            </label>\n" +
+    "                                            <select ng-model=\"ri.monthlydayofmonthday\" id=\"{{name}}monthlydayofmonthday\"\n" +
+    "                                                    ng-options=\"o as o for o in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]\"></select>\n" +
+    "                                            {{i18n.monthlyDayOfMonth2}}\n" +
+    "                                        </div>\n" +
+    "                                        <div>\n" +
+    "                                            <input type=\"radio\"\n" +
+    "                                                   value=\"WEEKDAYOFMONTH\"\n" +
+    "                                                   ng-model=\"ri.monthlytype\"\n" +
+    "                                                   id=\"{{name}}monthlytype:WEEKDAYOFMONTH\" />\n" +
+    "                                            <label for=\"{{name}}monthlytype:WEEKDAYOFMONTH\">\n" +
+    "                                                {{i18n.monthlyWeekdayOfMonth1}}\n" +
+    "                                            </label>\n" +
+    "                                            <select ng-model=\"ri.monthlyweekdayofmonthindex\" ng-options=\"conf.orderIndexes[i] as o for (i,o) in i18n.orderIndexes\"></select>\n" +
+    "                                            {{i18n.monthlyWeekdayOfMonth2}}\n" +
+    "                                            <select ng-model=\"ri.monthlyweekdayofmonth\" ng-options=\"conf.weekdays[o] as i18n.weekdays[o] for o in conf.orderedWeekdays\"></select>\n" +
+    "                                            {{i18n.monthlyWeekdayOfMonth3}}\n" +
+    "                                        </div>\n" +
+    "                                    </div>\n" +
+    "                                </div>\n" +
+    "                                <div ng-show=\"ri.showriyearlyinterval()\" class=\"rifield\">\n" +
+    "                                    <label for=\"riyearlyinterval\" class=\"rilabel\">{{i18n.yearlyInterval1}}</label>\n" +
+    "                                    <div class=\"field\">\n" +
+    "                                        <input type=\"text\" size=\"2\"\n" +
+    "                                               value=\"1\"\n" +
+    "                                               ng-model=\"ri.yearlyinterval\" />\n" +
+    "                                        {{i18n.yearlyInterval2}}\n" +
+    "                                    </div>\n" +
+    "                                </div>\n" +
+    "                                <div ng-show=\"ri.showriyearlyoptions()\" class=\"rifield riyearlyoptions\">\n" +
+    "                                    <label for=\"riyearlyType\" class=\"rilabel\">{{i18n.yearlyRepeatOn}}</label>\n" +
+    "                                    <div class=\"field\">\n" +
+    "                                        <div>\n" +
+    "                                            <input type=\"radio\"\n" +
+    "                                                   value=\"DAYOFMONTH\"\n" +
+    "                                                   ng-model=\"ri.yearlyType\"\n" +
+    "                                                   id=\"{{name}}yearlytype:DAYOFMONTH\" />\n" +
+    "                                            <label for=\"{{name}}yearlytype:DAYOFMONTH\">\n" +
+    "                                                {{i18n.yearlyDayOfMonth1}}\n" +
+    "                                            </label>\n" +
+    "                                            <select ng-model=\"ri.yearlydayofmonthmonth\" ng-options=\"i18n.months.indexOf(m)+1 as m for m in i18n.months\"></select>\n" +
+    "                                            {{i18n.yearlyDayOfMonth2}}\n" +
+    "                                            <select ng-model=\"ri.yearlydayofmonthday\"\n" +
+    "                                                    ng-options=\"o as o for o in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]\"></select>\n" +
+    "                                            {{i18n.yearlyDayOfMonth3}}\n" +
+    "                                        </div>\n" +
+    "                                        <div>\n" +
+    "                                            <input type=\"radio\"\n" +
+    "                                                   value=\"WEEKDAYOFMONTH\"\n" +
+    "                                                   ng-model=\"ri.yearlyType\"\n" +
+    "                                                   id=\"{{name}}yearlytype:WEEKDAYOFMONTH\" />\n" +
+    "                                            <label for=\"{{name}}yearlytype:WEEKDAYOFMONTH\">\n" +
+    "                                                {{i18n.yearlyWeekdayOfMonth1}}\n" +
+    "                                            </label>\n" +
+    "                                            <select ng-model=\"ri.yearlyweekdayofmonthindex\" ng-options=\"conf.orderIndexes[i] as o for (i,o) in i18n.orderIndexes\"></select>\n" +
+    "                                            <label for=\"{{name}}yearlytype:WEEKDAYOFMONTH\">\n" +
+    "                                                {{i18n.yearlyWeekdayOfMonth2}}\n" +
+    "                                            </label>\n" +
+    "                                            <select ng-model=\"ri.yearlyweekdayofmonthday\" ng-options=\"conf.weekdays[o] as i18n.weekdays[o] for o in conf.orderedWeekdays\"></select>\n" +
+    "                                            {{i18n.yearlyWeekdayOfMonth3}}\n" +
+    "                                            <select ng-model=\"ri.yearlyweekdayofmonthmonth\" ng-options=\"i18n.months.indexOf(m)+1 as m for m in i18n.months\"></select>\n" +
+    "                                            {{i18n.yearlyWeekdayOfMonth4}}\n" +
+    "                                        </div>\n" +
+    "                                    </div>\n" +
+    "                                </div>\n" +
+    "                                <div ng-show=\"ri.showrirangeoptions()\" class=\"rifield rirangeoptions\">\n" +
+    "                                    <label class=\"rilabel\">{{i18n.range}}</label>\n" +
+    "                                    <div class=\"field\">\n" +
+    "                                        <div ng-show=\"conf.hasRepeatForeverButton\">\n" +
+    "                                            <input type=\"radio\"\n" +
+    "                                                   value=\"NOENDDATE\"\n" +
+    "                                                   ng-model=\"ri.rangetype\"\n" +
+    "                                                   id=\"{{name}}rangetype:NOENDDATE\" />\n" +
+    "                                            <label for=\"{{name}}rangetype:NOENDDATE\">\n" +
+    "                                                {{i18n.rangeNoEnd}}\n" +
+    "                                            </label>\n" +
+    "                                        </div>\n" +
+    "                                        <div>\n" +
+    "                                            <input type=\"radio\"\n" +
+    "                                                   checked=\"checked\"\n" +
+    "                                                   value=\"BYOCCURRENCES\"\n" +
+    "                                                   ng-model=\"ri.rangetype\"\n" +
+    "                                                   id=\"{{name}}rangetype:BYOCCURRENCES\" />\n" +
+    "                                            <label for=\"{{name}}rangetype:BYOCCURRENCES\">\n" +
+    "                                                {{i18n.rangeByOccurrences1}}\n" +
+    "                                            </label>\n" +
+    "                                            <input type=\"text\" size=\"3\"\n" +
+    "                                                   value=\"10\"\n" +
+    "                                                   ng-model=\"ri.rangebyoccurrencesvalue\" />\n" +
+    "                                            {{i18n.rangeByOccurrences2}}\n" +
+    "                                        </div>\n" +
+    "                                        <div>\n" +
+    "                                            <input type=\"radio\"\n" +
+    "                                                   value=\"BYENDDATE\"\n" +
+    "                                                   ng-model=\"ri.rangetype\"\n" +
+    "                                                   id=\"{{name}}rangetype:BYENDDATE\" />\n" +
+    "                                            <label for=\"{{name}}rangetype:BYENDDATE\">\n" +
+    "                                                {{i18n.rangeByEndDate}}\n" +
+    "                                            </label>\n" +
+    "                                            <input type=\"text\" ng-model=\"ri.rangebyenddate\" datepicker-popup=\"MM/dd/yyyy\" />\n" +
+    "                                        </div>\n" +
+    "                                    </div>\n" +
+    "                                </div>\n" +
+    "                            </div>\n" +
+    "                            <div class=\"rioccurrencesactions\" ng-show=\"ri.showrioccurrencesactions\">\n" +
+    "                                <div class=\"rioccurancesheader\">\n" +
+    "                                    <h2>{{i18n.preview}}</h2>\n" +
+    "                                    <span class=\"refreshbutton action\">\n" +
+    "                                        <a class=\"rirefreshbutton\" href=\"#\" title=\"{{i18n.refresh}}\">\n" +
+    "                                            {{i18n.refresh}}\n" +
+    "                                        </a>\n" +
+    "                                    </span>\n" +
+    "                                </div>\n" +
+    "                            </div>\n" +
+    "                            <div class=\"rioccurrences\">\n" +
+    "                            </div>\n" +
+    "                            <div class=\"rioccurrencesactions\" ng-show=\"ri.showrioccurrencesactions\">\n" +
+    "                                <div class=\"rioccurancesheader\">\n" +
+    "                                    <h2>{{i18n.addDate}}</h2>\n" +
+    "                                </div>\n" +
+    "                                <div class=\"riaddoccurrence\">\n" +
+    "                                    <div class=\"errorarea\" ng-bind=\"ri.errorsText\" ng-show=\"ri.errorsText\"></div>\n" +
+    "                                    <input type=\"date\" name=\"adddate\" id=\"adddate\" />\n" +
+    "                                    <input type=\"button\" name=\"addaction\" id=\"addaction\" value=\"{{i18n.add}}\">\n" +
+    "                                </div>\n" +
+    "                            </div>\n" +
+    "                            <br />\n" +
+    "                        </div>\n" +
+    "                    </div>\n" +
+    "                </form>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"modal-footer\">\n" +
+    "            <button class=\"btn btn-primary\" data-ng-click=\"ri.save()\">{{i18n.save}}</button>\n" +
+    "            <button class=\"btn btn-warning\" data-ng-click=\"ri.cancel()\">{{i18n.cancel}}</button>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "<!--<div class=\"rioccurrences\">\n" +
+    "\n" +
+    "    {{each occurrences}}\n" +
+    "    <div class=\"occurrence {{occurrences[$index].type}}\">\n" +
+    "\n" +
+    "        <span>\n" +
+    "\n" +
+    "            {{occurrences[$index].formattedDate}}\n" +
+    "            {{if occurrences[$index].type === \"start\"}}\n" +
+    "            <span class=\"rlabel\">{{i18n.recurrenceStart}}</span>\n" +
+    "            {{/if}}\n" +
+    "            {{if occurrences[$index].type === \"rdate\"}}\n" +
+    "            <span class=\"rlabel\">{{i18n.additionalDate}}</span>\n" +
+    "            {{/if}}\n" +
+    "\n" +
+    "        </span>\n" +
+    "        {{if !readOnly}}\n" +
+    "        <span class=\"action\">\n" +
+    "\n" +
+    "            {{if occurrences[$index].type === \"rrule\"}}\n" +
+    "            <a date=\"{{occurrences[$index].date}}\" href=\"#\"\n" +
+    "                                class=\"{{occurrences[$index].type}}\" title=\"{{i18n.exclude}}\">\n" +
+    "\n" +
+    "                {{i18n.exclude}}\n" +
+    "\n" +
+    "            </a>\n" +
+    "            {{/if}}\n" +
+    "            {{if occurrences[$index].type === \"rdate\"}}\n" +
+    "            <a date=\"{{occurrences[$index].date}}\" href=\"#\"\n" +
+    "                                class=\"{{occurrences[$index].type}}\" title=\"{{i18n.remove}}\">\n" +
+    "\n" +
+    "                {{i18n.remove}}\n" +
+    "\n" +
+    "            </a>\n" +
+    "            {{/if}}\n" +
+    "            {{if occurrences[$index].type === \"exdate\"}}\n" +
+    "            <a date=\"{{occurrences[$index].date}}\" href=\"#\"\n" +
+    "                                class=\"{{occurrences[$index].type}}\" title=\"{{i18n.include}}\">\n" +
+    "\n" +
+    "                {{i18n.include}}\n" +
+    "\n" +
+    "            </a>\n" +
+    "            {{/if}}\n" +
+    "\n" +
+    "        </span>\n" +
+    "        {{/if}}\n" +
+    "\n" +
+    "    </div>\n" +
+    "    {{/each}}\n" +
+    "    <div class=\"batching\">\n" +
+    "\n" +
+    "        {{each batch.batches}}\n" +
+    "        {{if $index === batch.currentBatch}}<span class=\"current\">\n" +
+    "            {{/if}}\n" +
+    "            <a href=\"#\" start=\"{{batch.batches[$index][0]}}\">[{{batch.batches[$index][0]}} - {{batch.batches[$index][1]}}]</a>\n" +
+    "            {{if $index === batch.currentBatch}}\n" +
+    "        </span>{{/if}}\n" +
+    "        {{/each}}\n" +
+    "\n" +
+    "    </div>\n" +
+    "</div>-->\n" +
+    "";
+    var riDirective = function () {
         /**********************************
             Configuration
         ***********************************/
@@ -93,7 +568,7 @@
         };
 
         tool.localize("en", {
-            displayUnactivate: 'Does not repeat',
+            displayUnactivate: 'Repeat...',
             displayActivate: 'Repeats every',
             add_rules: 'Add',
             edit_rules: 'Edit...',
@@ -207,7 +682,7 @@
 
         return {
             restrict: 'E',
-            templateUrl: globs.baseUrl + 'lib/angular-recurrenceinput/recurrenceinput.html',
+            template: riTemplate["ridisplay.html"],
             scope: {
                 xrrule: '=ngModel',
                 riConfig: '=',
@@ -645,7 +1120,7 @@
                         }
 
                         for (i = 0; i < rtemplate.fields.length; i++) {
-                            var field = rtemplate.fields[i];
+                            field = rtemplate.fields[i];
                             switch (field) {
 
                                 case 'ridailyinterval':
@@ -679,7 +1154,7 @@
                                             // Just keep the first
                                             bymonthday = bymonthday[0];
                                         }
-                                        $scope.ri.monthlydayofmonthday = parseInt(bymonthday);
+                                        $scope.ri.monthlydayofmonthday = parseInt(bymonthday, 10);
                                     }
 
                                     if (byday) {
@@ -716,8 +1191,8 @@
                                             unsupportedFeatures.push(conf.i18n.multipleDayOfMonth);
                                             bymonthday = bymonthday[0];
                                         }
-                                        $scope.ri.yearlydayofmonthmonth = parseInt(bymonth);
-                                        $scope.ri.yearlydayofmonthday = parseInt(bymonthday);
+                                        $scope.ri.yearlydayofmonthmonth = parseInt(bymonth, 10);
+                                        $scope.ri.yearlydayofmonthday = parseInt(bymonthday, 10);
                                     }
 
                                     if (byday) {
@@ -735,7 +1210,7 @@
                                         weekday = byday.slice(-2);
                                         $scope.ri.yearlyweekdayofmonthindex = index;
                                         $scope.ri.yearlyweekdayofmonthday = weekday;
-                                        $scope.ri.yearlyweekdayofmonthmonth = parseInt(bymonth);
+                                        $scope.ri.yearlyweekdayofmonthmonth = parseInt(bymonth, 10);
                                     }
 
                                     $scope.ri.yearlyType = yearlyType;
@@ -1090,7 +1565,7 @@
                         $scope.ri.enabled = true;
                         recurrenceOn();
                     }
-                }
+                };
 
                 $scope.ri.cancel = function () {
                     // close overlay
@@ -1098,7 +1573,7 @@
                     updateInternals();
                     // focus on checkbox
                     //display.find('input[name=richeckbox]').focus();
-                }
+                };
 
                 function updateOccurances() {
                     var startDate;
@@ -1122,7 +1597,7 @@
                     if ($scope.ri.enabled) {
                         $scope.modal = $modal.open({
                             backdrop: true,
-                            templateUrl: 'riform.html',
+                            template: riTemplate["riform.html"],
                             controller: function ($scope, $modalInstance) {
                                 $scope.ri = directiveScope.ri;
                                 $scope.i18n = directiveScope.i18n;
@@ -1135,7 +1610,8 @@
                 };
 
                 $scope.ri.hideForm = function () {
-                    $scope.ri.$modalInstance && $scope.ri.$modalInstance.close();
+					if($scope.ri.$modalInstance)
+						$scope.ri.$modalInstance.close();
                 };
 
                 $scope.ical = { RDATE: [], EXDATE: [] };
@@ -1184,5 +1660,12 @@
                 $scope.$watch('xrrule', updateInternals);
             }
         };
-    }]);
-});
+    };
+	
+	if(typeof define === "function" && define.amd) {
+        define("riDirective", function (require, exports, module) {
+            return riDirective;
+        });
+	} else {
+		window.riDirective = riDirecetive;
+	}})(window, document, define);
