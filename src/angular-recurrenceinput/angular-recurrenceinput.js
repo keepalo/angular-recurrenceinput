@@ -202,7 +202,12 @@
         ***********************************/
 		controller.$inject = ['$scope', '$modal'];
 		function controller ($scope, $modal) {
-			$scope.ri = {};
+			$scope.ri = {
+                rtemplate: tool.conf.rtemplate.daily
+            };
+
+            $scope.initialXRRule = $scope.xrrule;
+
 			/**********************************
 				Parsing functionality
 			***********************************/
@@ -1067,11 +1072,16 @@
 					$scope.ri.enabled = true;
 					recurrenceOn();
 				}
+
+                $scope.ri.saved = true;
 			};
 
 			$scope.ri.cancel = function () {
 				// close overlay
 				$scope.ri.hideForm();
+                if(!$scope.ri.saved)
+                    $scope.xrrule = $scope.initialXRRule;
+
 				updateInternals();
 				// focus on checkbox
 				//display.find('input[name=richeckbox]').focus();
