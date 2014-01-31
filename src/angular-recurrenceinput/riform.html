@@ -1,6 +1,4 @@
-﻿<div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header" data-ng-show="message">
+﻿        <div class="modal-header" data-ng-show="message">
             <h4 data-ng-bind="message"></h4>
         </div>
         <div class="modal-body">
@@ -207,66 +205,3 @@
             <button class="btn btn-primary" data-ng-click="ri.save()">{{i18n.save}}</button>
             <button class="btn btn-warning" data-ng-click="ri.cancel()">{{i18n.cancel}}</button>
         </div>
-    </div>
-</div>
-<!--<div class="rioccurrences">
-
-    {{each occurrences}}
-    <div class="occurrence {{occurrences[$index].type}}">
-
-        <span>
-
-            {{occurrences[$index].formattedDate}}
-            {{if occurrences[$index].type === "start"}}
-            <span class="rlabel">{{i18n.recurrenceStart}}</span>
-            {{/if}}
-            {{if occurrences[$index].type === "rdate"}}
-            <span class="rlabel">{{i18n.additionalDate}}</span>
-            {{/if}}
-
-        </span>
-        {{if !readOnly}}
-        <span class="action">
-
-            {{if occurrences[$index].type === "rrule"}}
-            <a date="{{occurrences[$index].date}}" href="#"
-                                class="{{occurrences[$index].type}}" title="{{i18n.exclude}}">
-
-                {{i18n.exclude}}
-
-            </a>
-            {{/if}}
-            {{if occurrences[$index].type === "rdate"}}
-            <a date="{{occurrences[$index].date}}" href="#"
-                                class="{{occurrences[$index].type}}" title="{{i18n.remove}}">
-
-                {{i18n.remove}}
-
-            </a>
-            {{/if}}
-            {{if occurrences[$index].type === "exdate"}}
-            <a date="{{occurrences[$index].date}}" href="#"
-                                class="{{occurrences[$index].type}}" title="{{i18n.include}}">
-
-                {{i18n.include}}
-
-            </a>
-            {{/if}}
-
-        </span>
-        {{/if}}
-
-    </div>
-    {{/each}}
-    <div class="batching">
-
-        {{each batch.batches}}
-        {{if $index === batch.currentBatch}}<span class="current">
-            {{/if}}
-            <a href="#" start="{{batch.batches[$index][0]}}">[{{batch.batches[$index][0]}} - {{batch.batches[$index][1]}}]</a>
-            {{if $index === batch.currentBatch}}
-        </span>{{/if}}
-        {{/each}}
-
-    </div>
-</div>-->

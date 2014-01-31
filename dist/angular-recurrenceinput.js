@@ -208,9 +208,7 @@ riTemplate["ridisplay.html"] = "<style>\n" +
     "    <div class=\"rioccurrences\" style=\"display:none\" />\n" +
     "</div>";
 
-riTemplate["riform.html"] = "<div class=\"modal-dialog\">\n" +
-    "    <div class=\"modal-content\">\n" +
-    "        <div class=\"modal-header\" data-ng-show=\"message\">\n" +
+riTemplate["riform.html"] = "        <div class=\"modal-header\" data-ng-show=\"message\">\n" +
     "            <h4 data-ng-bind=\"message\"></h4>\n" +
     "        </div>\n" +
     "        <div class=\"modal-body\">\n" +
@@ -417,69 +415,6 @@ riTemplate["riform.html"] = "<div class=\"modal-dialog\">\n" +
     "            <button class=\"btn btn-primary\" data-ng-click=\"ri.save()\">{{i18n.save}}</button>\n" +
     "            <button class=\"btn btn-warning\" data-ng-click=\"ri.cancel()\">{{i18n.cancel}}</button>\n" +
     "        </div>\n" +
-    "    </div>\n" +
-    "</div>\n" +
-    "<!--<div class=\"rioccurrences\">\n" +
-    "\n" +
-    "    {{each occurrences}}\n" +
-    "    <div class=\"occurrence {{occurrences[$index].type}}\">\n" +
-    "\n" +
-    "        <span>\n" +
-    "\n" +
-    "            {{occurrences[$index].formattedDate}}\n" +
-    "            {{if occurrences[$index].type === \"start\"}}\n" +
-    "            <span class=\"rlabel\">{{i18n.recurrenceStart}}</span>\n" +
-    "            {{/if}}\n" +
-    "            {{if occurrences[$index].type === \"rdate\"}}\n" +
-    "            <span class=\"rlabel\">{{i18n.additionalDate}}</span>\n" +
-    "            {{/if}}\n" +
-    "\n" +
-    "        </span>\n" +
-    "        {{if !readOnly}}\n" +
-    "        <span class=\"action\">\n" +
-    "\n" +
-    "            {{if occurrences[$index].type === \"rrule\"}}\n" +
-    "            <a date=\"{{occurrences[$index].date}}\" href=\"#\"\n" +
-    "                                class=\"{{occurrences[$index].type}}\" title=\"{{i18n.exclude}}\">\n" +
-    "\n" +
-    "                {{i18n.exclude}}\n" +
-    "\n" +
-    "            </a>\n" +
-    "            {{/if}}\n" +
-    "            {{if occurrences[$index].type === \"rdate\"}}\n" +
-    "            <a date=\"{{occurrences[$index].date}}\" href=\"#\"\n" +
-    "                                class=\"{{occurrences[$index].type}}\" title=\"{{i18n.remove}}\">\n" +
-    "\n" +
-    "                {{i18n.remove}}\n" +
-    "\n" +
-    "            </a>\n" +
-    "            {{/if}}\n" +
-    "            {{if occurrences[$index].type === \"exdate\"}}\n" +
-    "            <a date=\"{{occurrences[$index].date}}\" href=\"#\"\n" +
-    "                                class=\"{{occurrences[$index].type}}\" title=\"{{i18n.include}}\">\n" +
-    "\n" +
-    "                {{i18n.include}}\n" +
-    "\n" +
-    "            </a>\n" +
-    "            {{/if}}\n" +
-    "\n" +
-    "        </span>\n" +
-    "        {{/if}}\n" +
-    "\n" +
-    "    </div>\n" +
-    "    {{/each}}\n" +
-    "    <div class=\"batching\">\n" +
-    "\n" +
-    "        {{each batch.batches}}\n" +
-    "        {{if $index === batch.currentBatch}}<span class=\"current\">\n" +
-    "            {{/if}}\n" +
-    "            <a href=\"#\" start=\"{{batch.batches[$index][0]}}\">[{{batch.batches[$index][0]}} - {{batch.batches[$index][1]}}]</a>\n" +
-    "            {{if $index === batch.currentBatch}}\n" +
-    "        </span>{{/if}}\n" +
-    "        {{/each}}\n" +
-    "\n" +
-    "    </div>\n" +
-    "</div>-->\n" +
     "";
     var riDirective = function () {
         /**********************************
