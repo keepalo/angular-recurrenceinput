@@ -212,7 +212,7 @@
 				Parsing functionality
 			***********************************/
 			// Formatting function (mostly) from jQueryTools dateinput
-			var Re = /d{1,4}|m{1,4}|yy(?:yy)?|"[^"]*"|'[^']*'/g;
+			var Re = /d{1,4}|m{1,4}|hh|MM|ss|yy(?:yy)?|"[^"]*"|'[^']*'/g;
 
 			function zeropad(val, len) {
 				val = val.toString();
@@ -226,6 +226,9 @@
 					D = date.getDay(),
 					m = date.getMonth(),
 					y = date.getFullYear(),
+                    h = date.getHours(),
+                    M = date.getMinutes(),
+                    s = date.getSeconds(),
 
 					flags = {
 						d: d,
@@ -237,7 +240,10 @@
 						mmm: conf.i18n.shortMonths[m],
 						mmmm: conf.i18n.months[m],
 						yy: String(y).slice(2),
-						yyyy: y
+						yyyy: y,
+                        hh: zeropad(h),
+                        MM: zeropad(M),
+                        ss: zeropad(s)
 					};
 
 				var result = fmt.replace(Re, function ($0) {
@@ -389,7 +395,8 @@
 									break;
 								case 'BYENDDATE':
 									date = format($scope.ri.rangebyenddate, 'yyyymmdd', conf);
-									result += ';UNTIL=' + date + 'T235959';
+                                    var time = format($scope.ri.rangebyenddate, 'hhMMss', conf);
+									result += ';UNTIL=' + date + 'T' + time;
 									if (tz === true) {
 										// Make it UTC:
 										result += 'Z';
@@ -740,7 +747,7 @@
 									hour = until.slice(9, 11);
 									minute = until.slice(11, 13);
 									second = until.slice(13, 15);
-									$scope.ri.rangebyenddatecalendar = new Date(year, month, day, hour, minute, second);
+									$scope.ri.rangebyenddate = new Date(year, month, day, hour, minute, second);
 								}
 
 								$scope.ri.rangetype = rangeType;
