@@ -1209,5 +1209,5 @@
             return riDirective;
         });
 	} else {
-		window.riDirective = riDirecetive;
+		window.riDirective = riDirective;
 	}

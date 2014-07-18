@@ -1,4 +1,4 @@
-(function(window, document, define, undefined) {
+(function(window, document, undefined) {
 	'use strict';
 
 var riTemplate = {};
@@ -1627,5 +1627,5 @@ riTemplate["riform.html"] = "        <div class=\"modal-header\" data-ng-show=\"
             return riDirective;
         });
 	} else {
-		window.riDirective = riDirecetive;
-	}})(window, document, define);
+		window.riDirective = riDirective;
+	}})(window, document);
