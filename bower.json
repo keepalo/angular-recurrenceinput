@@ -1,6 +1,7 @@
 {
     "name": "angular-recurrenceinput",
-    "version": "0.0.0",
+    "version": "0.0.1",
+    "main": "dist/angular-recurrenceinput.js",
     "dependencies": {
         "angular": ">=1.0.7",
 		"angular-ui-bootstrap-bower": ">=0.7.0",
